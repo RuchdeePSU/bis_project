@@ -21,6 +21,11 @@
     $project_topic_advisor = new Project_Topic_Advisor($db);
     $project_advisor = new Project_Advisor($db);
 
+    $project_student->student_id = $_SESSION['student_id'];
+    $result_students2 = $project_student->readforDDL();
+    $result_students3 = $project_student->readforDDL();
+
+    $result_advisors = $project_advisor->readforDDL();
 
 ?>
 <!DOCTYPE html>
@@ -141,11 +146,35 @@
                                     </div>
                                 </div><!-- /.row -->
                                 <div class="row">
+                                    <div class="col-md-9 col-sm-9">
+                                        <header><h3>ประเภทโครงงาน</h3></header>
+                                        <div class="form-group">
+                                          <div class="form-check">
+                                              <label class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" id="chk_web_app" name="chk_web_app">
+                                                Web Application
+                                              </label>&nbsp;&nbsp;&nbsp;
+                                              <label class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" id="chk_mobile_app" name="chk_mobile_app">
+                                                Mobile Application
+                                              </label>&nbsp;&nbsp;&nbsp;
+                                              <label class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" id="chk_other_app" name="chk_other_app">
+                                                อื่นๆ
+                                              </label>
+                                            </div>
+                                        </div><!-- /.form-group -->
+                                    </div><!-- /.col-md-9 -->
+                                    <div class="col-md-3 col-sm-3">
+                                    </div>
+                                </div><!-- /.row -->
+
+                                <div class="row">
                                     <div class="col-md-6 col-sm-6">
                                         <header><h3>สมาชิกกลุ่มโครงงาน</h3></header>
                                         <div class="panel panel-default">
                                             <div class="panel-body">
-                                              <?php echo "1. " . $_SESSION['student_id'] . " " . $_SESSION['student_fullname']; ?>
+                                              <?php echo "1. " . $_SESSION['student_id'] . " " . $_SESSION['student_title'] . $_SESSION['student_fullname']; ?>
                                             </div>
                                         </div>
                                         <div class="panel panel-default">
@@ -156,7 +185,9 @@
                                         <div class="form-group" style="display:flex;">
                                             <select name="ddl_member_2" id="ddl_member_2">
                                                 <option value=" " selected>เลือกสมาชิกคนที่ 2</option>
-                                                <option value="0">ไม่อนุญาตให้แสดงข้อมูล</option>
+                                                <?php while ($row_students = mysqli_fetch_array($result_students2)) {
+                                                  echo "<option value=" . $row_students['student_id'] . ">" . $row_students['student_id'] . " " . $row_students['student_title'] . $row_students['student_fullname'] . "</option>";
+                                                } ?>
                                             </select>
                                             <button type="button" class="btn btn-success" id="btn_member_2" name="btn_member_2">เพิ่ม</button>
                                         </div>
@@ -167,8 +198,9 @@
                                         </div>
                                         <div class="form-group" style="display:flex;">
                                             <select name="ddl_member_3" id="ddl_member_3">
-                                                <option value=" " selected>เลือกสมาชิกคนที่ 3</option>
-                                                <option value="0">ไม่อนุญาตให้แสดงข้อมูล</option>
+                                                <option value=" " selected>เลือกสมาชิกคนที่ 3</option>   <?php while ($row_students3 = mysqli_fetch_array($result_students3)) {
+                                                  echo "<option value=" . $row_students3['student_id'] . ">" . $row_students3['student_id'] . " " . $row_students3['student_title'] . $row_students3['student_fullname'] . "</option>";
+                                                } ?>
                                             </select>
                                             <button type="button" class="btn btn-success" id="btn_member_3" name="btn_member_3">เพิ่ม</button>
                                         </div>
@@ -187,7 +219,9 @@
                                         <div class="form-group" style="display:flex;">
                                             <select name="ddl_advisor" id="ddl_advisor" data-error="กรุณาเลือกอาจารย์ที่ปรึกษา" required>
                                                 <option value=" " selected>เลือกอาจารย์ที่ปรึกษา</option>
-                                                <option value="1">อ.รุชดี บิลหมัด</option>
+                                                <?php while ($row_advisors = mysqli_fetch_array($result_advisors)) {
+                                                    echo "<option value=" . $row_advisors['advisor_id'] . ">" . $row_advisors['advisor_title'] . $row_advisors['advisor_fullname'] . "</option>";
+                                                } ?>
                                             </select>
                                             <button type="button" class="btn btn-success" id="btn_advisor" name="btn_advisor">เพิ่ม</button>
                                             <div class="help-block with-errors"></div>
@@ -246,8 +280,14 @@
 $(document).ready(function(){
   $('#btn_member_2').click(function(){
       if ($('#ddl_member_2').val() != ' ') {
-          var gtxt = $("#ddl_member_2").find("option:selected").text();
-          $("#selected_member_2").html("2. " + gtxt + " " + "<button type='button' class='btn btn-danger btn-xs' id='btn_member_2_del' name='btn_member_2_del'><i class='fa fa-trash-o'></i></button>");
+          if ($('#ddl_member_2').val() == $('#ddl_member_3').val()) {
+              $("#selected_member_2").html("ไม่สามารถเพิ่มสมาชิกซ้ำได้");
+              $("#ddl_member_2").get(0).selectedIndex = 0;
+              $("#ddl_member_2").val(' ').change();
+          } else {
+              var gtxt = $("#ddl_member_2").find("option:selected").text();
+              $("#selected_member_2").html("2. " + gtxt + " " + "<button type='button' class='btn btn-danger btn-xs' id='btn_member_2_del' name='btn_member_2_del'><i class='fa fa-trash-o'></i></button>");
+          }
       }
   });
   $(document).on("click", "#btn_member_2_del", function() {
@@ -258,8 +298,14 @@ $(document).ready(function(){
 
   $('#btn_member_3').click(function(){
       if ($('#ddl_member_3').val() != ' ') {
-          var gtxt = $("#ddl_member_3").find("option:selected").text();
-          $("#selected_member_3").html("3. " + gtxt + " " + "<button type='button' class='btn btn-danger btn-xs' id='btn_member_3_del' name='btn_member_3_del'><i class='fa fa-trash-o'></i></button>");
+          if ($('#ddl_member_3').val() == $('#ddl_member_2').val()) {
+              $("#selected_member_3").html("ไม่สามารถเพิ่มสมาชิกซ้ำได้");
+              $("#ddl_member_3").get(0).selectedIndex = 0;
+              $("#ddl_member_3").val(' ').change();
+          } else {
+              var gtxt = $("#ddl_member_3").find("option:selected").text();
+              $("#selected_member_3").html("3. " + gtxt + " " + "<button type='button' class='btn btn-danger btn-xs' id='btn_member_3_del' name='btn_member_3_del'><i class='fa fa-trash-o'></i></button>");
+          }
       }
   });
   $(document).on("click", "#btn_member_3_del", function() {
@@ -281,7 +327,6 @@ $(document).ready(function(){
   });
 });
 </script>
-
 
 </body>
 </html>

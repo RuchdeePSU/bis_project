@@ -172,7 +172,10 @@
                                                       echo "<span class='label label-warning'>ผ่านแบบมีเงื่อนไข</span>&nbsp;<a href='#' data-toggle='modal' data-target='#display-warning'><i class='fa fa-file-text'></i></a>";
                                                 } else { echo "<span class='label label-default'>รอพิจารณา</span>"; }?></td>
                                                 <td class="center">
-                                                    <a href="project_info_update.php?topic_id=<?php echo $row_topic['topic_id']; ?>" class="edit"><i class="fa fa-pencil"></i></a>
+                                                    <a href="project_info_update.php?topic_id=<?php echo $row_topic['topic_id']; ?>" class="edit
+                                                      <?php if ($row_topic['status'] == 1 || $row_topic['status'] == 2) {
+                                                        echo 'disabled';
+                                                      } ?>"><i class="fa fa-pencil"></i></a>
                                                 </td>
                                             </tr>
                                             <?php } ?>

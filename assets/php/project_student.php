@@ -7,10 +7,15 @@ class Project_Student{
 
     // object properties
     public $student_id;
+    public $student_title;
     public $student_fullname;
     public $student_email;
     public $project_year;
     public $topic_id;
+
+    // for pagination
+    public $start;
+    public $perpage;
 
     public function __construct($db){
         $this->conn = $db;
@@ -20,8 +25,8 @@ class Project_Student{
     function create(){
 
         // write statement
-        $stmt = mysqli_prepare($this->conn, "INSERT INTO " . $this->table_name . " (student_id, student_fullname, student_email, project_year) VALUES (?,?,?,?)");
-        mysqli_stmt_bind_param($stmt, 'ssss', $this->student_id, $this->student_email, $this->project_year);
+        $stmt = mysqli_prepare($this->conn, "INSERT INTO " . $this->table_name . " (student_id, student_title, student_fullname, student_email, project_year) VALUES (?,?,?,?,?)");
+        mysqli_stmt_bind_param($stmt, 'sssss', $this->student_id, $this->student_title, $this->student_fullname, $this->student_email, $this->project_year);
 
         /* execute prepared statement */
         if (mysqli_stmt_execute($stmt)) {
@@ -33,7 +38,7 @@ class Project_Student{
 
     // read all records
     function readall(){
-        $query = "SELECT * FROM " . $this->table_name . " ORDER BY student_id";
+        $query = "SELECT * FROM " . $this->table_name . " ORDER BY student_id LIMIT " . $this->start . ", " . $this->perpage;
         $result = mysqli_query($this->conn, $query);
         return $result;
     }
@@ -59,13 +64,20 @@ class Project_Student{
         return $result;
     }
 
+    // read for dll
+    function readforDDL(){
+        $query = "SELECT * FROM " . $this->table_name . " WHERE student_id <> '" . $this->student_id . "' ORDER BY student_id";
+        $result = mysqli_query($this->conn, $query);
+        return $result;
+    }
+
     // update record - account
     function update(){
-        $query = "UPDATE " . $this->table_name . " SET student_fullname = ?, student_email = ?, project_year = ? WHERE student_id = ?";
+        $query = "UPDATE " . $this->table_name . " SET student_title = ?, student_fullname = ?, student_email = ?, project_year = ? WHERE student_id = ?";
         // statement
         $stmt = mysqli_prepare($this->conn, $query);
         // bind parameters
-        mysqli_stmt_bind_param($stmt, 'ssss', $this->student_fullname, $this->student_email, $this->project_year, $this->student_id);
+        mysqli_stmt_bind_param($stmt, 'sssss', $this->student_title, $this->student_fullname, $this->student_email, $this->project_year, $this->student_id);
 
         /* execute prepared statement */
         if (mysqli_stmt_execute($stmt)) {
@@ -105,6 +117,20 @@ class Project_Student{
         }else {
             return false;
         }
+    }
+
+    //search students according to project_year
+    function readyear() {
+      $query = "SELECT * FROM " . $this->table_name . " WHERE project_year = '" . $this->project_year . "' ORDER BY student_id LIMIT " . $this->start . ", " . $this->perpage;
+      $result = mysqli_query($this->conn, $query);
+      return $result;
+    }
+
+    // get number of total records
+    function getTotalRows(){
+        $query = "SELECT * FROM " . $this->table_name;
+        $result = mysqli_query($this->conn, $query);
+        return mysqli_num_rows($result);
     }
 }
 

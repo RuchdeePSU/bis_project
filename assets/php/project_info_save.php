@@ -20,6 +20,9 @@
         $project_topic->title_en = $_POST['title_en'];
         $project_topic->abstract = "";
         $project_topic->project_year = $_SESSION['project_year'];
+        $project_topic->web_app = $_POST['chk_web_app'];
+        $project_topic->mobile_app = $_POST['chk_mobile_app'];
+        $project_topic->other_app = $_POST['chk_other_app'];
         $project_topic->status = 3;       // รอพิจาราณา
         $project_topic->comment = "";
         $project_topic->created_date = date("Y/m/d");

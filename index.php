@@ -55,8 +55,8 @@
                 <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="index.php">นักศึกษา</a></li>
-                        <li><a href="#">อาจารย์ผู้สอน</a></li>
-                        <li><a href="#">ผู้ดูแลระบบ</a></li>
+                        <li><a href="login_advisor.php">อาจารย์ที่ปรึกษา</a></li>
+                        <li><a href="login_admin.php">ผู้ดูแลระบบ</a></li>
                     </ul>
                 </nav><!-- /.navbar collapse-->
                 <!-- <div class="add-your-property">
@@ -81,7 +81,7 @@
             <header><h1>ลงชื่อเข้าใช้สำหรับนักศึกษา (Sign In)</h1></header>
             <div class="row">
                 <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
-                    <form role="form" id="form-create-account" method="post" action="assets/php/student-signin.php">
+                    <form role="form" id="form-create-account" method="post" action="assets/php/student_signin.php">
                         <div class="form-group">
                             <label for="form-create-account-email">Email:</label>
                             <input type="email" class="form-control" id="form-create-account-email" name="email" required>

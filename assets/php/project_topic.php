@@ -11,6 +11,9 @@ class Project_Topic{
     public $title_en;
     public $abstract;
     public $project_year;
+    public $web_app;
+    public $mobile_app;
+    public $other_app;
     public $status;       // 0=ไม่ผ่าน, 1=ผ่าน, 2=ผ่านแบบมีเงื่อนไข, 3=รอพิจารณา
     public $comment;
     public $created_date;
@@ -34,8 +37,8 @@ class Project_Topic{
         $this->topic_id = "BISProj" . $this->project_year . "-" . sprintf("%03d", $noproj);
 
         // write statement
-        $stmt = mysqli_prepare($this->conn, "INSERT INTO " . $this->table_name . " (topic_id, title_th, title_en, abstract, project_year, status, comment, created_date) VALUES (?,?,?,?,?,?,?,?)");
-        mysqli_stmt_bind_param($stmt, 'ssssssss', $this->topic_id, $this->title_th, $this->title_en, $this->abstract, $this->project_year, $this->status, $this->comment, $this->created_date);
+        $stmt = mysqli_prepare($this->conn, "INSERT INTO " . $this->table_name . " (topic_id, title_th, title_en, abstract, project_year, web_app, mobile_app, other_app, status, comment, created_date) VALUES (?,?,?,?,?,?,?,?)");
+        mysqli_stmt_bind_param($stmt, 'sssssssssss', $this->topic_id, $this->title_th, $this->title_en, $this->abstract, $this->project_year, $this->web_app, $this->mobile_app, $this->other_app, $this->status, $this->comment, $this->created_date);
 
         /* execute prepared statement */
         if (mysqli_stmt_execute($stmt)) {
@@ -62,11 +65,11 @@ class Project_Topic{
 
     // update record - account
     function update(){
-        $query = "UPDATE " . $this->table_name . " SET title_th = ?, title_en = ?, abstract = ?, project_year = ?, status = ?, comment = ?, updated_date = ? WHERE topic_id = ?";
+        $query = "UPDATE " . $this->table_name . " SET title_th = ?, title_en = ?, abstract = ?, project_year = ?, web_app = ?, mobile_app = ?, other_app = ?, status = ?, comment = ?, updated_date = ? WHERE topic_id = ?";
         // statement
         $stmt = mysqli_prepare($this->conn, $query);
         // bind parameters
-        mysqli_stmt_bind_param($stmt, 'ssssssss', $this->title_th, $this->title_en, $this->abstract, $this->project_year, $this->status, $this->comment, $this->updated_date, $this->topic_id);
+        mysqli_stmt_bind_param($stmt, 'sssssssssss', $this->title_th, $this->title_en, $this->abstract, $this->project_year, $this->web_app, $this->mobile_app, $this->other_app, $this->status, $this->comment, $this->updated_date, $this->topic_id);
 
         /* execute prepared statement */
         if (mysqli_stmt_execute($stmt)) {
