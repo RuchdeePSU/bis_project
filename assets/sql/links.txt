@@ -1,7 +1,0 @@
-http://www.kodingmadesimple.com/2015/01/convert-mysql-to-json-using-php.html
-
-Host your Application in the Google Cloud with XAMPP and Bitnami
-https://www.apachefriends.org/docs/hosting-xampp-on-google.html
-
-Bitnami PhpMyAdmin For Google Cloud Platform
-https://docs.bitnami.com/google/components/phpmyadmin/?utm_source=bitnami&utm_medium=cloudimage&utm_campaign=google
